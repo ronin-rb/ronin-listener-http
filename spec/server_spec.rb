@@ -6,7 +6,7 @@ describe Ronin::Exfil::HTTP::Server do
   let(:port)     { 8080 }
   let(:vhost)    { 'example.com' }
   let(:root)     { '/dir/' }
-  let(:callback) { ->(request) { } }
+  let(:callback) { ->(request) {} }
 
   subject { described_class.new(&callback) }
 
