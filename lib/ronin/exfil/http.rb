@@ -22,7 +22,38 @@ require 'ronin/exfil/http/server'
 
 module Ronin
   module Exfil
+    #
+    # Top-level methods for {Ronin::Exfil::HTTP}.
+    #
     module HTTP
+      #
+      # Starts the HTTP exfil server.
+      #
+      # @param [Hash{Symbol => Object}] kwargs
+      #   Additional keyword arguments for {Server#initialize}.
+      #
+      # @option kwargs [String] :host ('0.0.0.0')
+      #   The interface to listen on.
+      #
+      # @option kwargs [Integer] :port (80)
+      #   The local port to listen on.
+      #
+      # @option kwargs [String, Regexp] :vhost
+      #   The virtual host (vhost) to filter requests with.
+      #
+      # @option kwargs [String] :root ('/')
+      #   The root directory to filter requests with. Defaults to `/`.
+      #
+      # @yield [request]
+      #   The given block will be passed each received HTTP request.
+      #
+      # @yieldparam [Async::HTTP::Protocol::HTTP1::Request,
+      #              Async::HTTP::Protocol::HTTP2::Request] request
+      #   The received HTTP request object.
+      #
+      # @raise [ArgumentError]
+      #   No callback block was given.
+      #
       def self.listen(**kwargs,&callback)
         server = Server.new(**kwargs,&callback)
         server.run

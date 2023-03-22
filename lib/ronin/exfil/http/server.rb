@@ -78,6 +78,7 @@ module Ronin
         #
         # @yieldparam [Async::HTTP::Protocol::HTTP1::Request,
         #              Async::HTTP::Protocol::HTTP2::Request] request
+        #   The received HTTP request object.
         #
         # @raise [ArgumentError]
         #   No callback block was given.
