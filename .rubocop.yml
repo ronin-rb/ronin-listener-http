@@ -7,5 +7,8 @@ inherit_gem:
   rubocop-ronin: rubocop.yml
 
 #
-# ronin-FIXME specific exceptions
+# ronin-exfil-http specific exceptions
 #
+Style/CaseEquality:
+  Exclude:
+    - 'lib/ronin/exfil/http/server.rb'
