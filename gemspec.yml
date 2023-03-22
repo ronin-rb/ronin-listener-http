@@ -1,0 +1,27 @@
+name: ronin-exfil-http
+summary: A HTTP server for receiving exfiled data.
+description: |
+  ronin-exfil-http is a HTTP server for receiving exfiltrated data sent via HTTP
+  requests. ronin-exfil-http can be used to test for Server-Side Request Forgery
+  (SSRF) or XML external entity (XXE) injection.
+
+license: LGPL-3.0
+authors: Postmodern
+email: postmodern.mod3@gmail.com
+homepage: https://ronin-rb.dev/
+has_yard: true
+
+metadata:
+  documentation_uri: https://ronin-rb.dev/docs/ronin-exfil-http
+  source_code_uri:   https://github.com/ronin-rb/ronin-exfil-http
+  bug_tracker_uri:   https://github.com/ronin-rb/ronin-exfil-http/issues
+  changelog_uri:     https://github.com/ronin-rb/ronin-exfil-http/blob/main/ChangeLog.md
+  rubygems_mfa_required: 'true'
+
+required_ruby_version: ">= 3.0.0"
+
+dependencies:
+  async-http: ~> 0.60
+
+development_dependencies:
+  bundler: ~> 2.0
