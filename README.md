@@ -26,7 +26,7 @@ requests. ronin-exfil-http can be used to test for Server-Side Request Forgery
 
 ```ruby
 Ronin::Exfil::HTTP.listen(host: '127.0.0.1', port: 8080) do |request|
-  puts "#{request.method} #{request.path}"
+  puts "#{request.method} #{request.path} #{request.version}"
 
   request.headers.each do |name,value|
     puts "#{name}: #{value}"
