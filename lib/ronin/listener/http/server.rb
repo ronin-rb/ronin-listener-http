@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 #
-# ronin-exfil-http - A HTTP server for receiving exfiltrated data.
+# ronin-listener-http - A HTTP server for receiving exfiltrated data.
 #
 # Copyright (c) 2023 Hal Brodigan (postmodern.mod3@gmail.com)
 #
-# ronin-exfil-http is free software: you can redistribute it and/or modify
+# ronin-listener-http is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published
 # by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# ronin-exfil-http is distributed in the hope that it will be useful,
+# ronin-listener-http is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with ronin-exfil-http.  If not, see <https://www.gnu.org/licenses/>.
+# along with ronin-listener-http.  If not, see <https://www.gnu.org/licenses/>.
 #
 
 require 'async'
@@ -24,10 +24,10 @@ require 'async/http/endpoint'
 require 'async/http/protocol/response'
 
 module Ronin
-  module Exfil
+  module Listener
     module HTTP
       #
-      # A simple HTTP server that receives exfil HTTP requests.
+      # A simple HTTP server that receives exfiltrated HTTP requests.
       #
       class Server < Async::HTTP::Server
 
@@ -59,7 +59,7 @@ module Ronin
         attr_reader :callback
 
         #
-        # Initializes the HTTP exfil server.
+        # Initializes the HTTP listener server.
         #
         # @param [String] host
         #   The interface to listen on.

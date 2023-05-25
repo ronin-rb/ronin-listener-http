@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'ronin/exfil/http/server'
+require 'ronin/listener/http/server'
 
-describe Ronin::Exfil::HTTP::Server do
+describe Ronin::Listener::HTTP::Server do
   let(:host)     { '127.0.0.1' }
   let(:port)     { 8080 }
   let(:vhost)    { 'example.com' }

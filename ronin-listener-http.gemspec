@@ -10,8 +10,8 @@ Gem::Specification.new do |gem|
                   lib_dir = File.join(File.dirname(__FILE__),'lib')
                   $LOAD_PATH << lib_dir unless $LOAD_PATH.include?(lib_dir)
 
-                  require 'ronin/exfil/http/version'
-                  Ronin::Exfil::HTTP::VERSION
+                  require 'ronin/listener/http/version'
+                  Ronin::Listener::HTTP::VERSION
                 end
 
   gem.summary     = gemspec['summary']

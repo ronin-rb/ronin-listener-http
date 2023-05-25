@@ -1,9 +1,9 @@
-name: ronin-exfil-http
+name: ronin-listener-http
 summary: A HTTP server for receiving exfiled data.
 description: |
-  ronin-exfil-http is a HTTP server for receiving exfiltrated data sent via HTTP
-  requests. ronin-exfil-http can be used to test for Server-Side Request Forgery
-  (SSRF) or XML external entity (XXE) injection.
+  ronin-listener-http is a HTTP server for receiving exfiltrated data sent via
+  HTTP requests. ronin-listener-http can be used to test for Server-Side Request
+  Forgery (SSRF) or XML external entity (XXE) injection.
 
 license: LGPL-3.0
 authors: Postmodern
@@ -12,10 +12,10 @@ homepage: https://ronin-rb.dev/
 has_yard: true
 
 metadata:
-  documentation_uri: https://ronin-rb.dev/docs/ronin-exfil-http
-  source_code_uri:   https://github.com/ronin-rb/ronin-exfil-http
-  bug_tracker_uri:   https://github.com/ronin-rb/ronin-exfil-http/issues
-  changelog_uri:     https://github.com/ronin-rb/ronin-exfil-http/blob/main/ChangeLog.md
+  documentation_uri: https://ronin-rb.dev/docs/ronin-listener-http
+  source_code_uri:   https://github.com/ronin-rb/ronin-listener-http
+  bug_tracker_uri:   https://github.com/ronin-rb/ronin-listener-http/issues
+  changelog_uri:     https://github.com/ronin-rb/ronin-listener-http/blob/main/ChangeLog.md
   rubygems_mfa_required: 'true'
 
 required_ruby_version: ">= 3.0.0"
