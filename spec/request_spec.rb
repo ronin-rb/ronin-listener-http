@@ -147,4 +147,18 @@ describe Ronin::Listener::HTTP::Request do
       end
     end
   end
+
+  describe "#to_h" do
+    it "must return a Hash containing #method, #path, #version, #headers, and #body" do
+      expect(subject.to_h).to eq(
+        {
+          method:  method,
+          path:    path,
+          version: version,
+          headers: headers,
+          body:    body
+        }
+      )
+    end
+  end
 end

@@ -95,6 +95,21 @@ module Ronin
             @body    == other.body
         end
 
+        #
+        # Converts the request to a Hash.
+        #
+        # @return [Hash{Symbol => Object}]
+        #
+        def to_h
+          {
+            method:  @method,
+            path:    @path,
+            version: @version,
+            headers: @headers,
+            body:    @body
+          }
+        end
+
       end
     end
   end
