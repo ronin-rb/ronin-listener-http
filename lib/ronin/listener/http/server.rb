@@ -18,6 +18,8 @@
 # along with ronin-listener-http.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+require 'ronin/listener/http/request'
+
 require 'async'
 require 'async/http/server'
 require 'async/http/endpoint'
@@ -76,8 +78,7 @@ module Ronin
         # @yield [request]
         #   The given block will be passed each received HTTP request.
         #
-        # @yieldparam [Async::HTTP::Protocol::HTTP1::Request,
-        #              Async::HTTP::Protocol::HTTP2::Request] request
+        # @yieldparam [Request] request
         #   The received HTTP request object.
         #
         # @raise [ArgumentError]
@@ -128,7 +129,15 @@ module Ronin
         def process(request)
           if (@vhost.nil? || @vhost === request.authority)
             if request.path == @root || request.path.start_with?(@root)
-              @callback.call(request)
+              @callback.call(
+                Request.new(
+                  method:  request.method,
+                  path:    request.path,
+                  version: request.version,
+                  headers: request.headers,
+                  body:    request.body
+                )
+              )
             end
           end
 
