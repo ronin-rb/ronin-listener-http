@@ -4,6 +4,9 @@
 require 'bundler/setup'
 require 'ronin/listener/http'
 
+puts "Listening on 127.0.0.1:8080 ..."
+puts "Try sending requests to http://localhost:8080/ to test"
+
 begin
   Ronin::Listener::HTTP.listen(host: '127.0.0.1', port: 8080) do |request|
     puts "#{request.method} #{request.path} #{request.version}"
