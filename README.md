@@ -25,6 +25,8 @@ Forgery (SSRF) or XML external entity (XXE) injection.
 ## Examples
 
 ```ruby
+require 'ronin/listener/http'
+
 Ronin::Listener::HTTP.listen(host: '127.0.0.1', port: 8080) do |request|
   puts "#{request.method} #{request.path} #{request.version}"
 
