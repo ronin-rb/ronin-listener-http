@@ -99,6 +99,23 @@ module Ronin
         end
 
         #
+        # Converts the request to a String.
+        #
+        # @return [String]
+        #   The raw HTTP request.
+        #
+        def to_s
+          string = "#{@method} #{@path} HTTP/#{@version}\r\n"
+
+          @headers.each do |name,value|
+            string << "#{name}: #{value}\r\n"
+          end
+
+          string << "\r\n#{@body}"
+          return string
+        end
+
+        #
         # Converts the request to a Hash.
         #
         # @return [Hash{Symbol => Object}]

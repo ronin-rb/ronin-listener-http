@@ -148,6 +148,19 @@ describe Ronin::Listener::HTTP::Request do
     end
   end
 
+  describe "#to_s" do
+    it "must return a String containing the #method, #path, #version, #headers, and #body" do
+      expect(subject.to_s).to eq(
+        [
+          "#{method} #{path} HTTP/#{version}",
+          *headers.map { |name,value| "#{name}: #{value}" },
+          '',
+          body
+        ].join("\r\n")
+      )
+    end
+  end
+
   describe "#to_h" do
     it "must return a Hash containing #method, #path, #version, #headers, and #body" do
       expect(subject.to_h).to eq(
