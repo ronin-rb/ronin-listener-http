@@ -18,6 +18,7 @@
 # along with ronin-listener-http.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+require 'csv'
 require 'json'
 
 module Ronin
@@ -110,6 +111,28 @@ module Ronin
             headers: @headers,
             body:    @body
           }
+        end
+
+        #
+        # Converts the request into a CSV line.
+        #
+        # @return [String]
+        #   The generated CSV line.
+        #
+        def to_csv
+          CSV.generate_line(
+            [
+              @method,
+              @path,
+              @version,
+              CSV.generate { |csv|
+                @headers.each_pair do |name_value|
+                  csv << name_value
+                end
+              },
+              @body
+            ]
+          )
         end
 
         alias as_json to_h

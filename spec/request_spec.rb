@@ -162,6 +162,26 @@ describe Ronin::Listener::HTTP::Request do
     end
   end
 
+  describe "#to_csv" do
+    it "must convert the request into a CSV line, with the #headers as embedded CSV" do
+      expect(subject.to_csv).to eq(
+        CSV.generate_line(
+          [
+            method,
+            path,
+            version,
+            CSV.generate { |csv|
+              headers.each do |name,value|
+                csv << [name,value]
+              end
+            },
+            body
+          ]
+        )
+      )
+    end
+  end
+
   describe "#as_json" do
     it "must return #to_h" do
       expect(subject.as_json).to eq(subject.to_h)
