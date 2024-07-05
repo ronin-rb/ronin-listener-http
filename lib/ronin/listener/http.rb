@@ -47,8 +47,7 @@ module Ronin
       # @yield [request]
       #   The given block will be passed each received HTTP request.
       #
-      # @yieldparam [Async::HTTP::Protocol::HTTP1::Request,
-      #              Async::HTTP::Protocol::HTTP2::Request] request
+      # @yieldparam [Request] request
       #   The received HTTP request object.
       #
       # @raise [ArgumentError]
