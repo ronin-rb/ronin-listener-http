@@ -131,11 +131,12 @@ module Ronin
             if request.path == @root || request.path.start_with?(@root)
               @callback.call(
                 Request.new(
-                  method:  request.method,
-                  path:    request.path,
-                  version: request.version,
-                  headers: request.headers,
-                  body:    request.body
+                  remote_addr: request.remote_address,
+                  method:      request.method,
+                  path:        request.path,
+                  version:     request.version,
+                  headers:     request.headers,
+                  body:        request.body
                 )
               )
             end

@@ -1,24 +1,34 @@
 require 'spec_helper'
 require 'ronin/listener/http/request'
 
+require 'socket'
+
 describe Ronin::Listener::HTTP::Request do
-  let(:method)  { 'GET' }
-  let(:path)    { '/' }
-  let(:version) { '1.1' }
-  let(:headers) { {'Host' => 'host1.com'} }
-  let(:body)    { "foo bar" }
+  let(:remote_ip)   { '192.168.1.1' }
+  let(:remote_port) { 1234 }
+  let(:remote_addr) { Addrinfo.tcp(remote_ip,remote_port) }
+  let(:method)      { 'GET' }
+  let(:path)        { '/' }
+  let(:version)     { '1.1' }
+  let(:headers)     { {'Host' => 'host1.com'} }
+  let(:body)        { "foo bar" }
 
   subject do
     described_class.new(
-      method:  method,
-      path:    path,
-      version: version,
-      headers: headers,
-      body:    body
+      remote_addr: remote_addr,
+      method:      method,
+      path:        path,
+      version:     version,
+      headers:     headers,
+      body:        body
     )
   end
 
   describe "#initialize" do
+    it "must set #remote_addr" do
+      expect(subject.remote_addr).to eq(remote_addr)
+    end
+
     it "must set #method" do
       expect(subject.method).to eq(method)
     end
@@ -40,16 +50,29 @@ describe Ronin::Listener::HTTP::Request do
     end
   end
 
+  describe "#remote_ip" do
+    it "must return the remote IP address String" do
+      expect(subject.remote_ip).to eq(remote_ip)
+    end
+  end
+
+  describe "#remote_port" do
+    it "must return the remote port" do
+      expect(subject.remote_port).to eq(remote_port)
+    end
+  end
+
   describe "#==" do
     context "when given a #{described_class}" do
       context "and all attributes are the same" do
         let(:other) do
           described_class.new(
-            method:  method,
-            path:    path,
-            version: version,
-            headers: headers,
-            body:    body
+            remote_addr: remote_addr,
+            method:      method,
+            path:        path,
+            version:     version,
+            headers:     headers,
+            body:        body
           )
         end
 
@@ -58,9 +81,27 @@ describe Ronin::Listener::HTTP::Request do
         end
       end
 
+      context "but the #remote_addr is different" do
+        let(:other) do
+          described_class.new(
+            remote_addr: Addrinfo.tcp('192.168.1.42',2345),
+            method:      method,
+            path:        path,
+            version:     version,
+            headers:     headers,
+            body:        body
+          )
+        end
+
+        it "must return false" do
+          expect(subject == other).to be(false)
+        end
+      end
+
       context "but the #method is different" do
         let(:other) do
           described_class.new(
+            remote_addr: remote_addr,
             method:  'POST',
             path:    path,
             version: version,
@@ -77,6 +118,7 @@ describe Ronin::Listener::HTTP::Request do
       context "but the #path is different" do
         let(:other) do
           described_class.new(
+            remote_addr: remote_addr,
             method:  method,
             path:    '/different',
             version: version,
@@ -93,6 +135,7 @@ describe Ronin::Listener::HTTP::Request do
       context "but the #path is different" do
         let(:other) do
           described_class.new(
+            remote_addr: remote_addr,
             method:  method,
             path:    path,
             version: '1.0',
@@ -109,6 +152,7 @@ describe Ronin::Listener::HTTP::Request do
       context "but the #path is different" do
         let(:other) do
           described_class.new(
+            remote_addr: remote_addr,
             method:  method,
             path:    path,
             version: version,
@@ -125,6 +169,7 @@ describe Ronin::Listener::HTTP::Request do
       context "but the #path is different" do
         let(:other) do
           described_class.new(
+            remote_addr: remote_addr,
             method:  method,
             path:    path,
             version: version,
@@ -165,11 +210,13 @@ describe Ronin::Listener::HTTP::Request do
     it "must return a Hash containing #method, #path, #version, #headers, and #body" do
       expect(subject.to_h).to eq(
         {
-          method:  method,
-          path:    path,
-          version: version,
-          headers: headers,
-          body:    body
+          remote_ip:   remote_ip,
+          remote_port: remote_port,
+          method:      method,
+          path:        path,
+          version:     version,
+          headers:     headers,
+          body:        body
         }
       )
     end
@@ -180,6 +227,8 @@ describe Ronin::Listener::HTTP::Request do
       expect(subject.to_csv).to eq(
         CSV.generate_line(
           [
+            remote_ip,
+            remote_port,
             method,
             path,
             version,

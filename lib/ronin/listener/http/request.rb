@@ -29,6 +29,11 @@ module Ronin
       #
       class Request
 
+        # The remote address that sent the request.
+        #
+        # @return [Addrinfo]
+        attr_reader :remote_addr
+
         # The HTTP request method.
         #
         # @return [String]
@@ -57,6 +62,9 @@ module Ronin
         #
         # Initializes the request.
         #
+        # @param [Addrinfo] remote_addr
+        #   The remote address that sent the request.
+        #
         # @param [String] method
         #   The HTTP request method.
         #
@@ -72,12 +80,36 @@ module Ronin
         # @param [String, nil] body
         #   The optional body sent with the request.
         #
-        def initialize(method: , path: , version: , headers:, body: nil)
-          @method  = method
-          @path    = path
-          @version = version
-          @headers = headers
-          @body    = body
+        def initialize(remote_addr: ,
+                       method: ,
+                       path: ,
+                       version: ,
+                       headers:,
+                       body: nil)
+          @remote_addr = remote_addr
+          @method      = method
+          @path        = path
+          @version     = version
+          @headers     = headers
+          @body        = body
+        end
+
+        #
+        # The remote IP address that sent the request.
+        #
+        # @return [String]
+        #
+        def remote_ip
+          @remote_addr.ip_address
+        end
+
+        #
+        # The remote port that sent the request.
+        #
+        # @return [String]
+        #
+        def remote_port
+          @remote_addr.ip_port
         end
 
         #
@@ -91,11 +123,13 @@ module Ronin
         #
         def ==(other)
           self.class == other.class &&
-            @method  == other.method &&
-            @path    == other.path &&
-            @version == other.version &&
-            @headers == other.headers &&
-            @body    == other.body
+            remote_ip   == other.remote_ip &&
+            remote_port == other.remote_port &&
+            @method     == other.method &&
+            @path       == other.path &&
+            @version    == other.version &&
+            @headers    == other.headers &&
+            @body       == other.body
         end
 
         #
@@ -122,11 +156,13 @@ module Ronin
         #
         def to_h
           {
-            method:  @method,
-            path:    @path,
-            version: @version,
-            headers: @headers,
-            body:    @body
+            remote_ip:   remote_ip,
+            remote_port: remote_port,
+            method:      @method,
+            path:        @path,
+            version:     @version,
+            headers:     @headers,
+            body:        @body
           }
         end
 
@@ -139,6 +175,8 @@ module Ronin
         def to_csv
           CSV.generate_line(
             [
+              remote_ip,
+              remote_port,
               @method,
               @path,
               @version,

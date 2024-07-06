@@ -81,41 +81,51 @@ describe Ronin::Listener::HTTP::Server do
   end
 
   describe "#process" do
+    let(:remote_address) { Addrinfo.tcp('192.168.1.1',1234) }
+
     context "when #vhost is nil" do
       context "and #root is '/'" do
         let(:http_request1) do
-          double('Async HTTP request1', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'host1.com',
-                                        headers:   {'Host' => 'host1.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request1', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'host1.com',
+                                   headers:        {'Host' => 'host1.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request2) do
-          double('Async HTTP request2', method:    'GET',
-                                        path:      '/foo',
-                                        version:   '1.1',
-                                        authority: 'host2.com',
-                                        headers:   {'Host' => 'host2.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request2', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/foo',
+                                   version:        '1.1',
+                                   authority:      'host2.com',
+                                   headers:        {'Host' => 'host2.com'},
+                                   body:           nil
+          )
         end
 
         let(:yielded_request1) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request1.method,
-            version: http_request1.version,
-            headers: http_request1.headers,
-            path:    http_request1.path
+            remote_addr: http_request1.remote_address,
+            method:      http_request1.method,
+            version:     http_request1.version,
+            headers:     http_request1.headers,
+            path:        http_request1.path
           )
         end
 
         let(:yielded_request2) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request2.method,
-            version: http_request2.version,
-            headers: http_request2.headers,
-            path:    http_request2.path
+            remote_addr: http_request2.remote_address,
+            method:      http_request2.method,
+            version:     http_request2.version,
+            headers:     http_request2.headers,
+            path:        http_request2.path
           )
         end
 
@@ -130,47 +140,58 @@ describe Ronin::Listener::HTTP::Server do
 
       context "and #root is not '/'" do
         let(:http_request1) do
-          double('Async HTTP request1', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'host1.com',
-                                        headers:   {'Host' => 'host1.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request1', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'host1.com',
+                                   headers:        {'Host' => 'host1.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request2) do
-          double('Async HTTP request2', method:    'GET',
-                                        path:      '/dir/',
-                                        version:   '1.1',
-                                        authority: 'host2.com',
-                                        headers:   {'Host' => 'host2.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request2', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/dir/',
+                                   version:        '1.1',
+                                   authority:      'host2.com',
+                                   headers:        {'Host' => 'host2.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request3) do
-          double('Async HTTP request3', method:    'GET',
-                                        path:      '/dir/foo',
-                                        version:   '1.1',
-                                        authority: 'host3.com',
-                                        headers:   {'Host' => 'host3.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request3', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/dir/foo',
+                                   version:        '1.1',
+                                   authority:      'host3.com',
+                                   headers:        {'Host' => 'host3.com'},
+                                   body:           nil
+          )
         end
 
         let(:yielded_request1) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request2.method,
-            version: http_request2.version,
-            headers: http_request2.headers,
-            path:    http_request2.path
+            remote_addr: http_request2.remote_address,
+            method:      http_request2.method,
+            version:     http_request2.version,
+            headers:     http_request2.headers,
+            path:        http_request2.path
           )
         end
 
         let(:yielded_request2) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request3.method,
-            version: http_request3.version,
-            headers: http_request3.headers,
-            path:    http_request3.path
+            remote_addr: http_request2.remote_address,
+            method:      http_request3.method,
+            version:     http_request3.version,
+            headers:     http_request3.headers,
+            path:        http_request3.path
           )
         end
 
@@ -192,47 +213,58 @@ describe Ronin::Listener::HTTP::Server do
 
       context "and #root is '/'" do
         let(:http_request1) do
-          double('Async HTTP request1', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'other.com',
-                                        headers:   {'Host' => 'other.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request1', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'other.com',
+                                   headers:        {'Host' => 'other.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request2) do
-          double('Async HTTP request2', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'example.com',
-                                        headers:   {'Host' => 'example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request2', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'example.com',
+                                   headers:        {'Host' => 'example.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request3) do
-          double('Async HTTP request3', method:    'GET',
-                                        path:      '/foo',
-                                        version:   '1.1',
-                                        authority: 'example.com',
-                                        headers:   {'Host' => 'example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request3', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/foo',
+                                   version:        '1.1',
+                                   authority:      'example.com',
+                                   headers:        {'Host' => 'example.com'},
+                                   body:           nil
+          )
         end
 
         let(:yielded_request1) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request2.method,
-            version: http_request2.version,
-            headers: http_request2.headers,
-            path:    http_request2.path
+            remote_addr: http_request2.remote_address,
+            method:      http_request2.method,
+            version:     http_request2.version,
+            headers:     http_request2.headers,
+            path:        http_request2.path
           )
         end
 
         let(:yielded_request2) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request3.method,
-            version: http_request3.version,
-            headers: http_request3.headers,
-            path:    http_request3.path
+            remote_addr: http_request3.remote_address,
+            method:      http_request3.method,
+            version:     http_request3.version,
+            headers:     http_request3.headers,
+            path:        http_request3.path
           )
         end
 
@@ -248,38 +280,48 @@ describe Ronin::Listener::HTTP::Server do
 
       context "and #root is not '/'" do
         let(:http_request1) do
-          double('Async HTTP request1', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'other.com',
-                                        headers:   {'Host' => 'other.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request1', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'other.com',
+                                   headers:        {'Host' => 'other.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request2) do
-          double('Async HTTP request2', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'example.com',
-                                        headers:   {'Host' => 'example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request2', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'example.com',
+                                   headers:        {'Host' => 'example.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request3) do
-          double('Async HTTP request3', method:    'GET',
-                                        path:      '/dir/foo',
-                                        version:   '1.1',
-                                        authority: 'example.com',
-                                        headers:   {'Host' => 'example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request3', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/dir/foo',
+                                   version:        '1.1',
+                                   authority:      'example.com',
+                                   headers:        {'Host' => 'example.com'},
+                                   body:           nil
+          )
         end
 
         let(:yielded_request) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request3.method,
-            version: http_request3.version,
-            headers: http_request3.headers,
-            path:    http_request3.path
+            remote_addr: http_request3.remote_address,
+            method:      http_request3.method,
+            version:     http_request3.version,
+            headers:     http_request3.headers,
+            path:        http_request3.path
           )
         end
 
@@ -301,47 +343,58 @@ describe Ronin::Listener::HTTP::Server do
 
       context "and #root is '/'" do
         let(:http_request1) do
-          double('Async HTTP request1', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'other.com',
-                                        headers:   {'Host' => 'other.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request1', remote_address: remote_address,
+                                   method:    'GET',
+                                   path:      '/',
+                                   version:   '1.1',
+                                   authority: 'other.com',
+                                   headers:   {'Host' => 'other.com'},
+                                   body:      nil
+          )
         end
 
         let(:http_request2) do
-          double('Async HTTP request2', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'foo.example.com',
-                                        headers:   {'Host' => 'foo.example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request2', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'foo.example.com',
+                                   headers:        {'Host' => 'foo.example.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request3) do
-          double('Async HTTP request3', method:    'GET',
-                                        path:      '/foo',
-                                        version:   '1.1',
-                                        authority: 'bar.example.com',
-                                        headers:   {'Host' => 'bar.example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request3', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/foo',
+                                   version:        '1.1',
+                                   authority:      'bar.example.com',
+                                   headers:        {'Host' => 'bar.example.com'},
+                                   body:           nil
+          )
         end
 
         let(:yielded_request1) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request2.method,
-            version: http_request2.version,
-            headers: http_request2.headers,
-            path:    http_request2.path
+            remote_addr: http_request2.remote_address,
+            method:      http_request2.method,
+            version:     http_request2.version,
+            headers:     http_request2.headers,
+            path:        http_request2.path
           )
         end
 
         let(:yielded_request2) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request3.method,
-            version: http_request3.version,
-            headers: http_request3.headers,
-            path:    http_request3.path
+            remote_addr: http_request3.remote_address,
+            method:      http_request3.method,
+            version:     http_request3.version,
+            headers:     http_request3.headers,
+            path:        http_request3.path
           )
         end
 
@@ -357,38 +410,48 @@ describe Ronin::Listener::HTTP::Server do
 
       context "and #root is not '/'" do
         let(:http_request1) do
-          double('Async HTTP request1', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'other.com',
-                                        headers:   {'Host' => 'bar.example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request1', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'other.com',
+                                   headers:        {'Host' => 'bar.example.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request2) do
-          double('Async HTTP request2', method:    'GET',
-                                        path:      '/',
-                                        version:   '1.1',
-                                        authority: 'foo.example.com',
-                                        headers:   {'Host' => 'bar.example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request2', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/',
+                                   version:        '1.1',
+                                   authority:      'foo.example.com',
+                                   headers:        {'Host' => 'bar.example.com'},
+                                   body:           nil
+          )
         end
 
         let(:http_request3) do
-          double('Async HTTP request3', method:    'GET',
-                                        path:      '/dir/foo',
-                                        version:   '1.1',
-                                        authority: 'bar.example.com',
-                                        headers:   {'Host' => 'bar.example.com'},
-                                        body:      nil)
+          double(
+            'Async HTTP request3', remote_address: remote_address,
+                                   method:         'GET',
+                                   path:           '/dir/foo',
+                                   version:        '1.1',
+                                   authority:      'bar.example.com',
+                                   headers:        {'Host' => 'bar.example.com'},
+                                   body:           nil
+          )
         end
 
         let(:yielded_request) do
           Ronin::Listener::HTTP::Request.new(
-            method:  http_request3.method,
-            version: http_request3.version,
-            headers: http_request3.headers,
-            path:    http_request3.path
+            remote_addr: http_request3.remote_address,
+            method:      http_request3.method,
+            version:     http_request3.version,
+            headers:     http_request3.headers,
+            path:        http_request3.path
           )
         end
 
