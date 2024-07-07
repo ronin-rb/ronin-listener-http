@@ -465,6 +465,44 @@ describe Ronin::Listener::HTTP::Server do
             server.process(http_request3)
           }.to yield_successive_args(yielded_request)
         end
+
+        context "when the requests include a query string" do
+          let(:http_request3) do
+            double(
+              'Async HTTP request3', remote_address: remote_address,
+                                     method:         'GET',
+                                     path:           '/dir/foo?q=1',
+                                     version:        '1.1',
+                                     authority:      'bar.example.com',
+                                     headers:        {'Host' => 'bar.example.com'},
+                                     body:           nil
+            )
+          end
+
+          let(:yielded_request) do
+            reference = Protocol::HTTP::Reference.parse(http_request3.path)
+            path      = reference.path
+            query     = reference.query
+
+            Ronin::Listener::HTTP::Request.new(
+              remote_addr: http_request3.remote_address,
+              method:      http_request3.method,
+              version:     http_request3.version,
+              headers:     http_request3.headers,
+              path:        path,
+              query:       query
+            )
+          end
+
+          it "must parse the request and split the path from the query string" do
+            expect { |b|
+              server = described_class.new(vhost: vhost, root: root, &b)
+              server.process(http_request1)
+              server.process(http_request2)
+              server.process(http_request3)
+            }.to yield_successive_args(yielded_request)
+          end
+        end
       end
     end
   end

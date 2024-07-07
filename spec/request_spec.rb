@@ -9,6 +9,7 @@ describe Ronin::Listener::HTTP::Request do
   let(:remote_addr) { Addrinfo.tcp(remote_ip,remote_port) }
   let(:method)      { 'GET' }
   let(:path)        { '/' }
+  let(:query)       { 'q=1' }
   let(:version)     { '1.1' }
   let(:headers)     { {'Host' => 'host1.com'} }
   let(:body)        { "foo bar" }
@@ -47,6 +48,30 @@ describe Ronin::Listener::HTTP::Request do
 
     it "must set #body" do
       expect(subject.body).to eq(body)
+    end
+
+    context "when the query: keyword argument is not given" do
+      it "must set #query to nil" do
+        expect(subject.query).to be(nil)
+      end
+    end
+
+    context "when the query: keyword argument is given" do
+      subject do
+        described_class.new(
+          remote_addr: remote_addr,
+          method:      method,
+          path:        path,
+          query:       query,
+          version:     version,
+          headers:     headers,
+          body:        body
+        )
+      end
+
+      it "must set #query" do
+        expect(subject.query).to eq(query)
+      end
     end
   end
 
@@ -132,6 +157,24 @@ describe Ronin::Listener::HTTP::Request do
         end
       end
 
+      context "but the #query is different" do
+        let(:other) do
+          described_class.new(
+            remote_addr: remote_addr,
+            method:      method,
+            path:        path,
+            query:       'p=1',
+            version:     version,
+            headers:     headers,
+            body:        body
+          )
+        end
+
+        it "must return false" do
+          expect(subject == other).to be(false)
+        end
+      end
+
       context "but the #path is different" do
         let(:other) do
           described_class.new(
@@ -204,16 +247,54 @@ describe Ronin::Listener::HTTP::Request do
         ].join("\r\n")
       )
     end
+
+    context "when #query is set" do
+      subject do
+        described_class.new(
+          remote_addr: remote_addr,
+          method:      method,
+          path:        path,
+          query:       query,
+          version:     version,
+          headers:     headers,
+          body:        body
+        )
+      end
+
+      it "must append '?\#{query}' to the path of the request String" do
+        expect(subject.to_s).to eq(
+          [
+            "#{method} #{path}?#{query} HTTP/#{version}",
+            *headers.map { |name,value| "#{name}: #{value}" },
+            '',
+            body
+          ].join("\r\n")
+        )
+      end
+    end
   end
 
   describe "#to_h" do
-    it "must return a Hash containing #method, #path, #version, #headers, and #body" do
+    subject do
+      described_class.new(
+        remote_addr: remote_addr,
+        method:      method,
+        path:        path,
+        query:       query,
+        version:     version,
+        headers:     headers,
+        body:        body
+      )
+    end
+
+    it "must return a Hash containing #method, #path, #query, #version, #headers, and #body" do
       expect(subject.to_h).to eq(
         {
           remote_ip:   remote_ip,
           remote_port: remote_port,
           method:      method,
           path:        path,
+          query:       query,
           version:     version,
           headers:     headers,
           body:        body
@@ -223,6 +304,18 @@ describe Ronin::Listener::HTTP::Request do
   end
 
   describe "#to_csv" do
+    subject do
+      described_class.new(
+        remote_addr: remote_addr,
+        method:      method,
+        path:        path,
+        query:       query,
+        version:     version,
+        headers:     headers,
+        body:        body
+      )
+    end
+
     it "must convert the request into a CSV line, with the #headers as embedded CSV" do
       expect(subject.to_csv).to eq(
         CSV.generate_line(
@@ -231,6 +324,7 @@ describe Ronin::Listener::HTTP::Request do
             remote_port,
             method,
             path,
+            query,
             version,
             CSV.generate { |csv|
               headers.each do |name,value|

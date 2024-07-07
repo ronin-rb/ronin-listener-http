@@ -44,6 +44,11 @@ module Ronin
         # @return [String]
         attr_reader :path
 
+        # The request query string.
+        #
+        # @return [String, nil]
+        attr_reader :query
+
         # The HTTP version.
         #
         # @return [String]
@@ -71,6 +76,9 @@ module Ronin
         # @param [String] path
         #   The request path.
         #
+        # @param [String, nil] query
+        #   The request query string.
+        #
         # @param [String] version
         #   The HTTP version.
         #
@@ -83,12 +91,14 @@ module Ronin
         def initialize(remote_addr: ,
                        method: ,
                        path: ,
+                       query: nil,
                        version: ,
                        headers:,
                        body: nil)
           @remote_addr = remote_addr
           @method      = method
           @path        = path
+          @query       = query
           @version     = version
           @headers     = headers
           @body        = body
@@ -127,6 +137,7 @@ module Ronin
             remote_port == other.remote_port &&
             @method     == other.method &&
             @path       == other.path &&
+            @query      == other.query &&
             @version    == other.version &&
             @headers    == other.headers &&
             @body       == other.body
@@ -139,7 +150,11 @@ module Ronin
         #   The raw HTTP request.
         #
         def to_s
-          string = "#{@method} #{@path} HTTP/#{@version}\r\n"
+          request_uri = if @query then "#{@path}?#{@query}"
+                        else           @path
+                        end
+
+          string = "#{@method} #{request_uri} HTTP/#{@version}\r\n"
 
           @headers.each do |name,value|
             string << "#{name}: #{value}\r\n"
@@ -160,6 +175,7 @@ module Ronin
             remote_port: remote_port,
             method:      @method,
             path:        @path,
+            query:       @query,
             version:     @version,
             headers:     @headers,
             body:        @body
@@ -179,6 +195,7 @@ module Ronin
               remote_port,
               @method,
               @path,
+              @query,
               @version,
               CSV.generate { |csv|
                 @headers.each_pair do |name_value|

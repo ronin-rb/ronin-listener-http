@@ -138,6 +138,7 @@ module Ronin
                   remote_addr: request.remote_address,
                   method:      request.method,
                   path:        path,
+                  query:       reference.query,
                   version:     request.version,
                   headers:     request.headers,
                   body:        request.body
