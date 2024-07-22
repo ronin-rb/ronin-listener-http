@@ -5,7 +5,7 @@ description: |
   HTTP requests. ronin-listener-http can be used to test for Server-Side Request
   Forgery (SSRF) or XML external entity (XXE) injection.
 
-license: LGPL-3.0
+license: LGPL-3.0-or-later
 authors: Postmodern
 email: postmodern.mod3@gmail.com
 homepage: https://ronin-rb.dev/
