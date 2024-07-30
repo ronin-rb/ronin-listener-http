@@ -18,7 +18,7 @@
 # along with ronin-listener-http.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/listener/http/server'
+require_relative 'http/server'
 
 module Ronin
   module Listener

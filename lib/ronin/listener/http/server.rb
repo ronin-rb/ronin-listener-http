@@ -18,7 +18,7 @@
 # along with ronin-listener-http.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'ronin/listener/http/request'
+require_relative 'request'
 
 require 'async'
 require 'async/http/server'
