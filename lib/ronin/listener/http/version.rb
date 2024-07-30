@@ -22,7 +22,7 @@ module Ronin
   module Listener
     module HTTP
       # ronin-listener-http version
-      VERSION = '0.1.0'
+      VERSION = '0.1.1'
     end
   end
 end
