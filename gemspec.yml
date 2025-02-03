@@ -21,6 +21,7 @@ metadata:
 required_ruby_version: ">= 3.0.0"
 
 dependencies:
+  csv: ~> 3.0
   async-http: ~> 0.60
 
 development_dependencies:
