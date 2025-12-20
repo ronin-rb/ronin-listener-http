@@ -24,7 +24,7 @@ require 'async'
 require 'async/http/server'
 require 'async/http/endpoint'
 require 'async/http/protocol/response'
-require 'protocol/http/reference'
+require 'protocol/url/reference'
 
 module Ronin
   module Listener
@@ -129,7 +129,7 @@ module Ronin
         #
         def process(request)
           if (@vhost.nil? || @vhost === request.authority)
-            reference = Protocol::HTTP::Reference.parse(request.path)
+            reference = Protocol::URL::Reference.parse(request.path)
             path      = reference.path
 
             if path == @root || path.start_with?(@root)

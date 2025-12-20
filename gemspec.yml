@@ -18,7 +18,7 @@ metadata:
   changelog_uri:     https://github.com/ronin-rb/ronin-listener-http/blob/main/ChangeLog.md
   rubygems_mfa_required: 'true'
 
-required_ruby_version: ">= 3.0.0"
+required_ruby_version: ">= 3.2.0"
 
 dependencies:
   csv: ~> 3.0
