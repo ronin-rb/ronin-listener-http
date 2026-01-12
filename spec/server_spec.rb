@@ -480,7 +480,7 @@ describe Ronin::Listener::HTTP::Server do
           end
 
           let(:yielded_request) do
-            reference = Protocol::HTTP::Reference.parse(http_request3.path)
+            reference = Protocol::URL::Reference.parse(http_request3.path)
             path      = reference.path
             query     = reference.query
 

@@ -41,7 +41,7 @@ end
 ## Requirements
 
 * [Ruby] >= 3.0.0
-* [async-http] ~> 0.60
+* [async-http] ~> 0.92
 
 ## Install
 
